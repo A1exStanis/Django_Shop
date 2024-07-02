@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'games/style.css' %}">
+    <title>{{ game.name }}</title>
+</head>
+<body>
+    <h4>
+        Name: {{ game.name }} <br/>
+        Price: {{ game.price }} <br/>
+        Description: {{ game.description }}
+    </h4>
+</body>
+</html>
