@@ -1,6 +1,7 @@
 {% extends 'games/base.html' %}
 {% load static %}
 
+
 {% block content %}
 
 <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 md:px-20 lx:mt-8 lx:px-28">
@@ -19,7 +20,6 @@
         <div class="px-6 py-4">
           <p class="font-bold text-xl mb-2">{{ game.name }}</p>
           <p class="text-green-500 font-bold text-lx mb-2">{{ game.price }} UAH</p>
-          <p class="text-grey-700 text-base">{{ game.description }}</p>
         </div>
     </a>
   {% endfor %}

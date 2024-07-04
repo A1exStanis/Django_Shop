@@ -5,6 +5,8 @@ from django.http import HttpResponse
 
 def hello(request):
     items = Game.objects.all()
+    for game in items:
+        game.save()
     context = {
         'games': items
     }

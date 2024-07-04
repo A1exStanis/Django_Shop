@@ -6,8 +6,8 @@ from django.urls import reverse
 class Game(models.Model):
     name = models.CharField(max_length=100)
     price = models.IntegerField()
-    description = models.CharField(max_length=200)
-    slug = models.SlugField(default='', null=False)
+    description = models.CharField(max_length=500)
+    slug = models.SlugField(default='', null=False, blank=True)
     image = models.ImageField(blank=True, upload_to='image')
 
     def save(self, *args, **kwargs):
