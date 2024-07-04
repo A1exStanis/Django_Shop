@@ -1,32 +1,17 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
-    <link rel="stylesheet" href="{% static 'games/styles.css' %}">
-    <meta charset="UTF-8">
-    <title>Games</title>
-</head>
-<body>
-    <nav>
-        <div>
-            <div>
-                <div>
-                    <div class="flex">
-                        <img class="h-8 w-8" src="{% static 'games/images/logo.png' %}"/>
-                        <span class="text-2xl">Game Shop</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <h2>
-        Game list:
-    </h2>
-    <h4>
-        {% for game in games %}
-            <a href="{{ game.get_url }}">{{ game.name }}</a>
-            Name: {{ game.name }} | Price: {{ game.price }} | Description: {{ game.description }} <br/>
-        {% endfor %}
-    </h4>
-</body>
-</html>
+{% extends 'games/base.html' %}
+
+
+{% block content %}
+
+<h2>
+    Game list:
+</h2>
+<h4>
+    {% for game in games %}
+        <a href="{{ game.get_url }}">{{ game.name }}
+        Name: {{ game.name }} | Price: {{ game.price }}<br/>
+        <img src="{{ game.image.url }}">
+        </a>
+    {% endfor %}
+</h4>
+{% endblock %}

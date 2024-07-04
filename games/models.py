@@ -8,6 +8,7 @@ class Game(models.Model):
     price = models.IntegerField()
     description = models.CharField(max_length=200)
     slug = models.SlugField(default='', null=False)
+    image = models.ImageField(blank=True, upload_to='image')
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

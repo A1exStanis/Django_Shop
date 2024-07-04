@@ -1,10 +1,17 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <link rel="stylesheet" href="{% static 'games/styles.css' %}">
+  <title>Title</title>
 </head>
 <body>
-$END$
+
+{% include 'games/navbar.html' %}
+
+{% block content %}
+
+{% endblock %}
 </body>
 </html>
