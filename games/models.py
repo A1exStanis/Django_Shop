@@ -10,7 +10,7 @@ class Game(models.Model):
     slug = models.SlugField(default='', null=False, blank=True)
     image = models.ImageField(blank=True, upload_to='image')
 
-    def save(self, *args, **kwargs):
+    def create_slug(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Game, self).save(*args, **kwargs)
 

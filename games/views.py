@@ -16,3 +16,15 @@ def hello(request):
 def indexGame(request, slug_name):
     game = get_object_or_404(Game, slug=slug_name)
     return render(request, 'games/one_game.html', {'game': game})
+
+
+def add_game(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        description = request.POST.get('description')
+        image = request.FILES.get('upload')
+        game = Game(name=name, price=price, description=description, image=image)
+        game.save()
+        game.create_slug()
+    return render(request, 'games/add_game.html')
