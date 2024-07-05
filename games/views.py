@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Game
 from django.http import HttpResponse
 
@@ -6,7 +6,7 @@ from django.http import HttpResponse
 def hello(request):
     items = Game.objects.all()
     for game in items:
-        game.save()
+        game.create_slug()
     context = {
         'games': items
     }
@@ -36,3 +36,18 @@ def add_game(request):
         game.save()
         game.create_slug()
     return render(request, 'games/add_game.html')
+
+
+def update_game(request, slug_name):
+    game = get_object_or_404(Game, slug=slug_name)
+    if request.method == "POST":
+        game.name = request.POST.get('name')
+        game.price = request.POST.get('price')
+        game.description = request.POST.get('description')
+        game.image = request.FILES.get('upload', game.image)
+        game.save()
+        return redirect('main-page')
+    context = {
+        'game': game
+    }
+    return render(request, 'games/update_game.html', context=context)

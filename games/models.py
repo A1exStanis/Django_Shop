@@ -14,6 +14,9 @@ class Game(models.Model):
         self.slug = slugify(self.name)
         super(Game, self).save(*args, **kwargs)
 
+    def slug_name(self):
+        return self.slug
+
     def get_url(self):
         return reverse('game-detail', args=[self.slug])
 
