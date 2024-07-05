@@ -14,6 +14,14 @@ def hello(request):
 
 
 def indexGame(request, slug_name):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        image = request.FILES['upload']
+        game = Game(name=name, price=price, description=description, image=image)
+        game.save()
+        game.create_slug()
     game = get_object_or_404(Game, slug=slug_name)
     return render(request, 'games/one_game.html', {'game': game})
 
