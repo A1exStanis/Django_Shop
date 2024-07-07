@@ -51,3 +51,14 @@ def update_game(request, slug_name):
         'game': game
     }
     return render(request, 'games/update_game.html', context=context)
+
+
+def delete_game(request, slug_name):
+    game = get_object_or_404(Game, slug=slug_name)
+    if request.method == "POST":
+        game.delete()
+        return redirect('main-page')
+    context = {
+        'game': game
+    }
+    return render(request, 'games/delete_game.html', context=context)
