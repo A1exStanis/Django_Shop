@@ -3,6 +3,9 @@ from .models import Game
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from functools import wraps
+from django.views.generic import ListView, DetailView, View, DeleteView, UpdateView
+from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 
 
 def user_has_specific_id(id_required):
@@ -17,20 +20,30 @@ def user_has_specific_id(id_required):
     return decorator
 
 
-def hello(request):
-    items = Game.objects.all()
-    for game in items:
-        game.create_slug()
-    context = {
-        'games': items
-    }
-    return render(request, 'games/index.html', context=context)
+class GameListView(ListView):
+    model = Game
+    template_name = 'games/index.html'
+    context_object_name = 'games'
 
 
-def indexGame(request, slug_name):
-    user_id = request.user.id
-    if user_id == 1:
-        if request.method == "POST":
+game_list = GameListView.as_view()
+
+
+class GameDetailView(DetailView):
+    model = Game
+    template_name = 'games/one_game_admin.html'
+    context_object_name = 'game'
+    slug_url_kwarg = 'slug_name'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if request.user.id == 1:
+            return super().get(request, *args, **kwargs)
+        else:
+            return render(request, 'games/one_game.html', {'game': self.object})
+
+    def post(self, request, *args, **kwargs):
+        if request.user.id == 1:
             name = request.POST.get("name")
             price = request.POST.get("price")
             description = request.POST.get("description")
@@ -38,17 +51,21 @@ def indexGame(request, slug_name):
             game = Game(name=name, price=price, description=description, image=image)
             game.save()
             game.create_slug()
-        game = get_object_or_404(Game, slug=slug_name)
-        return render(request, 'games/one_game_admin.html', {'game': game})
-    else:
-        game = get_object_or_404(Game, slug=slug_name)
-        return render(request, 'games/one_game.html', {'game': game})
+            return render(request, 'games/one_game_admin.html', {'game': game})
+        else:
+            return render(request, 'games/one_game.html', {'game': self.object})
 
 
-@login_required
-@user_has_specific_id(id_required=1)
-def add_game(request):
-    if request.method == "POST":
+indexGame = login_required(GameDetailView.as_view())
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_has_specific_id(id_required=1), name='dispatch')
+class AddGameView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'games/add_game.html')
+
+    def post(self, request, *args, **kwargs):
         name = request.POST.get('name')
         price = request.POST.get('price')
         description = request.POST.get('description')
@@ -56,34 +73,35 @@ def add_game(request):
         game = Game(name=name, price=price, description=description, image=image)
         game.save()
         game.create_slug()
-    return render(request, 'games/add_game.html')
+        return render(request, 'games/add_game.html')
 
 
-@login_required
-@user_has_specific_id(id_required=1)
-def update_game(request, slug_name):
-    game = get_object_or_404(Game, slug=slug_name)
-    if request.method == "POST":
-        game.name = request.POST.get('name')
-        game.price = request.POST.get('price')
-        game.description = request.POST.get('description')
-        game.image = request.FILES.get('upload', game.image)
-        game.save()
-        return redirect('main-page')
-    context = {
-        'game': game
-    }
-    return render(request, 'games/update_game.html', context=context)
+add_game = AddGameView.as_view()
 
 
-@login_required
-@user_has_specific_id(id_required=1)
-def delete_game(request, slug_name):
-    game = get_object_or_404(Game, slug=slug_name)
-    if request.method == "POST":
-        game.delete()
-        return redirect('main-page')
-    context = {
-        'game': game
-    }
-    return render(request, 'games/delete_game.html', context=context)
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_has_specific_id(id_required=1), name='dispatch')
+class UpdateGameView(UpdateView):
+    model = Game
+    template_name = 'games/update_game.html'
+    fields = ['name', 'price', 'description', 'image']
+    slug_url_kwarg = 'slug_name'
+    success_url = reverse_lazy('main-page')
+
+
+update_game = login_required(UpdateGameView.as_view())
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_has_specific_id(id_required=1), name='dispatch')
+class DeleteGameView(DeleteView):
+    model = Game
+    template_name = 'games/delete_game.html'
+    success_url = reverse_lazy('main-page')
+    slug_url_kwarg = 'slug_name'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Game, slug=self.kwargs.get('slug_name'))
+
+
+delete_game = login_required(DeleteGameView.as_view())
