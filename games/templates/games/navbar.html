@@ -20,8 +20,10 @@
                     {% else %}
                     <a href="{% url 'login' %}" class="py-4 px-2 text-gray-500 font-semibold">Login</a>
                     {% endif %}
+                    {% if user.id == 1 %}
                     <a href="{% url 'add-game' %}" class="py-4 px-2 text-gray-500 font-semibold"><button class="bg-blue-600 hover:bg-green-500 px-3 rounded text-white show-modal">Add Game</button>
                     </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

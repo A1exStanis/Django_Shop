@@ -9,6 +9,8 @@
                 <p class="mt-5">{{ game.name }}</p>
                 <p class="mt-5 text-green-500">{{ game.price | intcomma }} UAH</p>
                 <p class="mt-5 text-grey-600">{{ game.description }}</p>
+                <button class="bg-green-500 text-white mt-[40px]"><a href="{% url 'update-game' game.slug_name %}">Update Game</a> </button>
+                <button class="bg-red-500 text-white mt-[40px]"><a href="{% url 'delete-game' game.slug_name %}">Delete Game</a> </button>
         </div>
 </div>
 
