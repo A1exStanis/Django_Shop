@@ -22,7 +22,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('myapp/', include('games.urls')),
+    path('game-shop/', include('games.urls')),
     path('user/', include('users.urls'))
 ]
 
