@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from .models import Game
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -6,6 +6,8 @@ from functools import wraps
 from django.views.generic import ListView, DetailView, View, DeleteView, UpdateView
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 def user_has_specific_id(id_required):
@@ -19,14 +21,42 @@ def user_has_specific_id(id_required):
         return wrapper
     return decorator
 
+def index(request):
+    page_obj = Game.objects.all()
 
-class GameListView(ListView):
-    model = Game
-    template_name = 'games/index.html'
-    context_object_name = 'games'
+    game_name = request.GET.get('search')
+    if game_name != '' and game_name is not None:
+        page_obj = page_obj.filter(name__icontains=game_name)
+
+    paginator = Paginator(page_obj, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+        'page_obj': page_obj
+    }
+    return render(request, 'games/index.html', context=context)
 
 
-game_list = GameListView.as_view()
+# class GameListView(ListView):
+#     model = Game
+#     template_name = 'games/index.html'
+#     context_object_name = 'page_obj'
+#     paginate_by = 9
+#
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         game_name = self.request.GET.get('search')
+#         if game_name:
+#             queryset = queryset.filter(name__icontains=game_name)
+#         return queryset
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['search'] = self.request.GET.get('search', '')
+#         return context
+#
+#
+# game_list = GameListView.as_view()
 
 
 class GameDetailView(DetailView):
