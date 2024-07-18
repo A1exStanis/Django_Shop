@@ -6,20 +6,29 @@
 
 <main class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 md:px-20 lx:mt-8 lx:px-28">
 
-  <div class="sm:text-center lg:text-left">
-    <h1 class="text-4xl font-extrabold text-grey-900 sm:text-5xl md:text-6xl">
-      <span class="block xl:inline">THE BEST GAMES</span>
-      <span class="block xl:inline text-green-500">FOR THE BEST PRICES</span>
-    </h1>
+  <div class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Контейнер для заголовка та форми пошуку -->
+    <div class="flex flex-col lg:flex-row lg:items-start lg:space-x-8">
+        <!-- Заголовок -->
+        <div class="flex-1 sm:text-center lg:text-left">
+            <h1 class="text-4xl font-extrabold text-grey-900 sm:text-5xl md:text-6xl">
+                <span class="block xl:inline">THE BEST GAMES</span>
+                <span class="block xl:inline text-green-500">FOR THE BEST PRICES</span>
+            </h1>
+        </div>
+
+        <!-- Форма пошуку -->
+        <div class="mt-8 lg:mt-0 lg:w-1/3 p-10 bg-green-100 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-green-700 mb-4">Search</h2>
+            <form action="" method="get" class="flex items-center space-x-4">
+                <input type="text" name="search" placeholder="Type your search..." class="flex-1 px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition duration-300">Search</button>
+            </form>
+        </div>
+    </div>
   </div>
 
-	<div class="mt-5 p-10 bg-green-100 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold text-green-700 mb-4">Search</h2>
-    <form action="" method="get" class="flex items-center space-x-4">
-        <input type="text" name="search" placeholder="Type your search..." class="flex-1 px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
-        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition duration-300">Search</button>
-    </form>
-  </div>
+
 
 
   <div class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 gap-3">
@@ -65,8 +74,8 @@
             <div class="flex space-x-1">
                 <!-- Перша сторінка та попередня сторінка -->
                 {% if page_obj.has_previous %}
-                    <a href="?page=1" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition duration-300">First Page</a>
                     <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition duration-300">Previous Page</a>
+                    <a href="?page=1" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition duration-300">First Page</a>
                 {% endif %}
             </div>
             <div class="flex space-x-1">
