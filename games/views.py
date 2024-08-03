@@ -156,7 +156,6 @@ def create_checkout_session(request, id):
     product = get_object_or_404(Game, pk=id)
     stripe.api_key = settings.STRIPE_SECRET_KEY
     checkout_session = stripe.checkout.Session.create(
-        customer_email=request.user.email,
         payment_method_types=['card'],
         line_games=[
             {'price_data': {
@@ -170,7 +169,7 @@ def create_checkout_session(request, id):
             }
         ],
         mode='payment',
-        success_url=request.built_absolute_uri(reverse('success'))+'?session_id+{CHECKOUT_SESSION_ID}',
+        success_url=request.built_absolute_uri(reverse('success'))+'?session_id={CHECKOUT_SESSION_ID}',
         cancel_url=request.built_absolute_uri(reverse('failed'))
     )
     order = OrderDetail()
@@ -188,7 +187,7 @@ class PaymentSuccessView(TemplateView):
     def get(self, request, *args, **kwargs):
         session_id = request.GET.get('session_id')
         if session_id is None:
-            return HttpResponseNotFound
+            return HttpResponseNotFound()
         session = stripe.checkout.Session.retrieve(session_id)
         stripe.api_key = settings.STRIPE_SECRET_KEY
         order = get_object_or_404(OrderDetail, stripe_payment_intent=session.payment_intent)
