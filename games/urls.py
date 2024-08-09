@@ -12,5 +12,5 @@ urlpatterns = [
     path('delete-game/<str:slug_name>/', views.delete_game, name='delete-game'),
     path('success/', views.payment_success, name='success'),
     path('failed/', views.payment_failed, name='failed'),
-    path('api/checkout-session/<int:id>', views.update_game, name='api-checkout-session'),
+    path('api/checkout-session/<int:id>', views.create_checkout_session, name='api-checkout-session'),
 ]
